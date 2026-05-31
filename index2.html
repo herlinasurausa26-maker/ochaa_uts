@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Pemesanan Makanan</title>
+    <style>
+        /* --- CSS (Desain Tampilan) --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        /* Layout Utama */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* Kolom Menu */
+        .menu-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            border-right: 2px solid #eee;
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e74c3c;
+            display: inline-block;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .menu-info {
+            flex: 1;
+        }
+
+        .menu-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .menu-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Kolom Struk */
+        .nota-section {
+            flex: 0.8;
+            min-width: 280px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .nota-box {
+            background: white;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .nota-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted #eee;
+            font-size: 14px;
+        }
+
+        .nota-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #333;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+            color: #e74c3c;
+        }
+
+        .nota-empty {
+            text-align: center;
+            color: #999;
+            padding: 50px 0;
+        }
+
+        /* Tombol */
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #c0392b;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .menu-section {
+                border-right: none;
+                border-bottom: 2px solid #eee;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🍔 Rumah Makan Enak</h1>
+            <p>Selamat Datang! Silakan Pilih Menu Favorit Anda</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Bagian Menu -->
+            <div class="menu-section">
+                <h2 class="section-title">📋 Daftar Menu</h2>
+                <div id="menu-list">
+                    <!-- Menu akan di-generate oleh JavaScript -->
+                </div>
+            </div>
+
+            <!-- Bagian Struk -->
+            <div class="nota-section">
+                <h2 class="section-title">🧾 Struk Pesanan</h2>
+                <div class="nota-box" id="nota">
+                    <p class="nota-empty">Belum ada pesanan</p>
+                </div>
+                
+                <div class="nota-total">
+                    Total: Rp <span id="total-harga">0</span>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="hitungTotal()">💰 Hitung</button>
+                    <button class="btn btn-secondary" onclick="resetPesanan()">🔄 Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT (Logika Aplikasi) --- */
+        
+        // Data Menu
+        const menu = [
+            { id: 1, nama: "Nasi Goreng", harga: 15000 },
+            { id: 2, nama: "Mie Goreng", harga: 12000 },
+            { id: 3, nama: "Ayam Goreng", harga: 18000 },
+            { id: 4, nama: "Ayam Bakar", harga: 20000 },
+            { id: 5, nama: "Es Teh", harga: 3000 },
+            { id: 6, nama: "Jeruk Manis", harga: 5000 },
+            { id: 7, nama: "Kentang Goreng", harga: 10000 },
+            { id: 8, nama: "Nasgor Spesial", harga: 25000 }
+        ];
+
+        // Inisialisasi
+        let pesanan = {};
+
+        // Tampilkan Menu ke HTML
+        function renderMenu() {
+            const menuList = document.getElementById('menu-list');
+            menuList.innerHTML = '';
+
+            menu.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.innerHTML = `
+                    <div class="menu-info">
+                        <div class="menu-name">${item.nama}</div>
+                        <div class="menu-price">Rp ${item.harga.toLocaleString('id-ID')}</div>
+                    </div>
+                    <input type="number" 
+                           class="quantity-input" 
+                           id="qty-${item.id}" 
+                           min="0" 
+                           placeholder="0"
+                           onchange="updatePesanan(${item.id}, this.value)">
+                `;
+                menuList.appendChild(div);
+            });
+        }
+
+        // Update Data Pesanan
+        function updatePesanan(id, jumlah) {
+            if (jumlah > 0) {
+                pesanan[id] = parseInt(jumlah);
+            } else {
+                delete pesanan[id];
+            }
+        }
+
+        // Hitung Total & Tampilkan Struk
+        function hitungTotal() {
+            const nota = document.getElementById('nota');
+            const totalEl = document.getElementById('total-harga');
+            
+            let totalHarga = 0;
+            let htmlNota = '';
+            let adaPesanan = false;
+
+            // Loop melalui pesanan
+            for (const [id, jml] of Object.entries(pesanan)) {
+                const item = menu.find(m => m.id == id);
+                if (item) {
+                    const subTotal = item.harga * jml;
+                    totalHarga += subTotal;
+                    adaPesanan = true;
+                    
+                    htmlNota += `
+                        <div class="nota-item">
+                            <span>${item.nama} x${jml}</span>
+                            <span>Rp ${subTotal.toLocaleString('id-ID')}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // Tampilkan hasil
+            if (adaPesanan) {
+                nota.innerHTML = htmlNota;
+                totalEl.textContent = totalHarga.toLocaleString('id-ID');
+            } else {
+                nota.innerHTML = '<p class="nota-empty">Belum ada pesanan</p>';
+                totalEl.textContent = '0';
+                alert('Mohon pilih menu terlebih dahulu!');
+            }
+        }
+
+        // Reset Semua
+        function resetPesanan() {
+            pesanan = {};
+            renderMenu();
+            document.getElementById('nota').innerHTML = '<p class="nota-empty">Belum ada pesanan</p>';
+            document.getElementById('total-harga').textContent = '0';
+        }
+
+        // Jalankan saat pertama kali dibuka
+        renderMenu();
+    </script>
+</body>
+</html>
